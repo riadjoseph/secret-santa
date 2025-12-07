@@ -10,17 +10,30 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
+# Helper to get config from secrets (Cloud) or env (Local)
+def get_config(key, default=None):
+    if key in st.secrets:
+        return st.secrets[key]
+    return os.getenv(key, default)
+
 # Configuration
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") # using service role for admin tasks + RLS bypass if needed
-RESEND_API_KEY = os.getenv("RESEND_API_KEY")
-APP_DOMAIN = os.getenv("APP_DOMAIN", "http://localhost:8501")
-JWT_SECRET = os.getenv("SUPABASE_SERVICE_ROLE_KEY") # Using this as the signing secret
+SUPABASE_URL = get_config("SUPABASE_URL")
+SUPABASE_KEY = get_config("SUPABASE_SERVICE_ROLE_KEY") # using service role for admin tasks + RLS bypass if needed
+RESEND_API_KEY = get_config("RESEND_API_KEY")
+APP_DOMAIN = get_config("APP_DOMAIN", "http://localhost:8501")
+JWT_SECRET = get_config("SUPABASE_SERVICE_ROLE_KEY") # Using this as the signing secret
 JWT_ALGORITHM = "HS256"
 
 # Initialize Clients
+if not SUPABASE_URL or not SUPABASE_KEY:
+    st.error("Missing Supabase Configuration. Please check your secrets.")
+    st.stop()
+
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-resend.api_key = RESEND_API_KEY
+if RESEND_API_KEY:
+    resend.api_key = RESEND_API_KEY
+else:
+    st.warning("Resend API Key missing. Emails will not send.")
 
 def create_token(email):
     """Generate a JWT token for magic link."""
