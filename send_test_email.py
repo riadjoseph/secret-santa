@@ -6,7 +6,7 @@ load_dotenv()
 
 resend.api_key = os.environ.get("RESEND_API_KEY")
 
-email_domain = os.environ.get("APP_DOMAIN", "https://seokringle.com")
+email_domain = os.environ.get("APP_DOMAIN", "https://seo-santa.streamlit.app")
 # Extract domain from url if possible or just use a default sender
 sender_email = "onboarding@resend.dev" # Default for testing until domain is verified
 to_email = "riadjoseph@gmail.com" # Placeholder, will ask user or use env
