@@ -40,7 +40,10 @@ def load_user_profile(email):
 
 def save_profile(email, data):
     """Upsert user profile."""
-    if not supabase: return False
+    if not supabase:
+        print("Error: Supabase client not initialized")
+        return False, "Database connection not available"
+
     try:
         payload = {
             "email": email,
@@ -53,16 +56,18 @@ def save_profile(email, data):
             "expertise_level": data["expertise_level"],
             "wishlist": data["wishlist"]
         }
-        
+
         existing = load_user_profile(email)
         if existing:
-            supabase.table("participants").update(payload).eq("email", email).execute()
+            response = supabase.table("participants").update(payload).eq("email", email).execute()
         else:
-            supabase.table("participants").insert(payload).execute()
-        return True
+            response = supabase.table("participants").insert(payload).execute()
+
+        return True, "Profile saved successfully"
     except Exception as e:
-        print(f"Error saving profile: {e}")
-        return False
+        error_msg = str(e)
+        print(f"Error saving profile: {error_msg}")
+        return False, f"Failed to save profile: {error_msg}"
 
 def get_all_participants():
     """Fetch all participants for matching."""

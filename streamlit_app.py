@@ -340,11 +340,12 @@ def main():
                         "address": address,
                         "wishlist": wishlist_items
                     }
-                    if save_profile(email, data):
-                        st.success("✅ Profile saved successfully!")
+                    success, message = save_profile(email, data)
+                    if success:
+                        st.success(f"✅ {message}")
                         st.balloons()
                     else:
-                        st.error("Failed to save profile.")
+                        st.error(f"❌ {message}")
 
 if __name__ == "__main__":
     main()
