@@ -340,12 +340,23 @@ def main():
                         "address": address,
                         "wishlist": wishlist_items
                     }
-                    success, message = save_profile(email, data)
-                    if success:
-                        st.success(f"✅ {message}")
-                        st.balloons()
+                    result = save_profile(email, data)
+
+                    # Handle both old (bool) and new (tuple) return formats
+                    if isinstance(result, tuple):
+                        success, message = result
+                        if success:
+                            st.success(f"✅ {message}")
+                            st.balloons()
+                        else:
+                            st.error(f"❌ {message}")
                     else:
-                        st.error(f"❌ {message}")
+                        # Old format (bool only)
+                        if result:
+                            st.success("✅ Profile saved successfully!")
+                            st.balloons()
+                        else:
+                            st.error("❌ Failed to save profile. Check the console for details.")
 
 if __name__ == "__main__":
     main()
