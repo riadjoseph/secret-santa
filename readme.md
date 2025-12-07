@@ -1,108 +1,215 @@
-Readme · MD
-Copy
+# 🎄 Secret Santa Gift Exchange
 
-🎄 Secret Santa Streamlit App
-A web-based Secret Santa gift exchange application where participants can register and privately discover who they're buying for.
+A beautiful, mobile-friendly web app for organizing Secret Santa gift exchanges with wishlists, PIN security, and an exciting reveal animation!
 
-Features
-✅ Participant Registration
+![Secret Santa](https://img.shields.io/badge/Secret%20Santa-Gift%20Exchange-red?style=for-the-badge&logo=gift)
+![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
-Enter your name and family name
-Indicate if you're a kid (son/daughter under 18) or adult
-Each participant registers individually
-✅ Privacy-Focused
+## ✨ Features
 
-Participants only see their own match
-No one can see the complete list of assignments
-Keep the secret safe!
-✅ Family Constraints
+### 🎁 For Users
+- **Name Selection** - Choose your name from a dropdown (no typing errors!)
+- **PIN Security** - Each person gets a unique 4-digit PIN to access their match
+- **Exciting Reveal** - Spinning animation builds anticipation before revealing your match
+- **Wishlist System** - Add up to 3 gift ideas with optional product URLs
+- **Mobile Friendly** - Fully responsive design works perfectly on phones and tablets
+- **Wishlist Updates** - Edit your wishlist anytime
 
-Kids exchange gifts among themselves
-Adults exchange gifts among themselves
-No one gets someone from their own family
-✅ Admin Panel
+### 👨‍👩‍👧‍👦 Smart Matching
+- **Kids Exchange** - Children (7 participants) exchange among themselves
+- **Adults Exchange** - Parents (11 participants) exchange among themselves
+- **No Self-Matching** - Algorithm ensures no one gets themselves
 
-Generate assignments when everyone is registered
-View statistics (number of kids, adults, families)
-Clear all data if needed
-How to Run
-Option 1: Local Installation
-Install Python 3.8 or higher
-Install dependencies:
-bash
+### 🔒 Security & Privacy
+- **PIN Protection** - 4-digit PIN required to see your Secret Santa match
+- **Secure Data** - Data file excluded from repository
+- **No Snooping** - Can't see others' matches without their PIN
+
+### ⚙️ Admin Features
+- **Password Protected** - Admin panel secured with password
+- **Generate Assignments** - One-click Secret Santa matching
+- **Generate PINs** - Automatic unique PIN generation for all participants
+- **PIN Distribution** - View all PINs to share privately
+- **Statistics Dashboard** - Track wishlists, assignments, and PINs
+- **Clear Functions** - Clear wishlists or all data as needed
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Python 3.8 or higher
+- pip (Python package manager)
+
+### Installation
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/riadjoseph/secret-santa.git
+cd secret-santa
+```
+
+2. **Create a virtual environment (recommended)**
+```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+```
+
+3. **Install dependencies**
+```bash
 pip install -r requirements.txt
-Run the app:
-bash
+```
+
+4. **Run the app**
+```bash
 streamlit run secret_santa_streamlit.py
-Open your browser to the URL shown (usually http://localhost:8501)
-Option 2: Quick Start (without installation)
-bash
-# Install streamlit if you don't have it
-pip install streamlit
+```
 
-# Run the app
-streamlit run secret_santa_streamlit.py
-How to Use
-Step 1: Registration Phase
-Share the app URL with all participants
-Each person goes to the "Register" tab
-Fill in:
-Full name (exactly as they want it to appear)
-Family name (everyone in the same household uses the same family name)
-Are you a kid? Yes/No
-Click "Register"
-Step 2: Generate Assignments (Admin Only)
-Once ALL participants are registered
-Go to the Admin Panel in the sidebar
-Click "🔄 Generate New Assignments"
-The app will create valid assignments automatically
-Step 3: Participants Find Their Match
-Each person goes to "Find Your Match" tab
-Enters their name exactly as registered
-Clicks "Reveal My Secret Santa Match"
-They'll see who they're buying for (ONLY their match, not the full list!)
-Data Storage
-All data is stored in secret_santa_data.json
-This file is created automatically when the app runs
-To reset everything, use the "Clear All Data" button in admin panel
-Keep this file secure to maintain the secret!
-Example Usage
-Registration:
+5. **Open your browser**
+- The app will automatically open at `http://localhost:8501`
+- Or visit the URL shown in the terminal
 
-Ana (Family: Garcia, Kid: No)
-Pau (Family: Garcia, Kid: Yes)
-Victor (Family: Smith, Kid: Yes)
-Britta (Family: Smith, Kid: No)
-After generating assignments:
+## 📱 User Guide
 
-Kids exchange: Pau ↔ Victor
-Adults exchange: Ana ↔ Britta
-Each person only sees their own match when they look it up!
+### For Participants
 
-Troubleshooting
-"Not enough participants" error:
+#### 1. Enter Your Wishlist
+1. Go to **📝 Enter Your Wishlist** tab
+2. Select your name from the dropdown
+3. Add up to 3 gift ideas (URLs are optional)
+4. Click **💾 Save My Wishlist**
+5. You can update your wishlist anytime!
 
-You need at least 2 kids AND 2 adults
-Make sure all participants have registered
-"Name not found" error:
+#### 2. Find Your Match
+1. Go to **🎁 Find Your Match** tab
+2. Select your name from the dropdown
+3. Enter your 4-digit PIN (received from the admin)
+4. Click **🎁 Reveal My Secret Santa Match**
+5. Watch the exciting animation! 🎉
+6. See who you're buying for and their wishlist
 
-Check spelling - names must match exactly
-Names are case-sensitive
-Want to regenerate assignments:
+### For Admins
 
-Just click "Generate New Assignments" again
-This will create a completely new random assignment
-Security Note
-⚠️ This app stores data in a local JSON file. If you need this on a server accessible to multiple people:
+#### Initial Setup
+1. Open the sidebar (click the arrow in the top-left)
+2. Enter admin password: `x` (change this!)
+3. Click **🔄 Generate New Assignments**
+4. Click **🔑 Generate PINs for All**
+5. Share PINs privately with each participant
 
-Consider adding password protection
-Use a proper database
-Deploy on a secure platform (like Streamlit Cloud with authentication)
-For family use on a local network, the current setup is fine!
+#### Admin Panel Features
+- **📊 Statistics** - View participant counts and completion status
+- **🔑 PINs for Distribution** - Copy/paste PINs to share
+- **🗑️ Clear All Wishlists** - Reset all wishlists (keeps assignments)
+- **🗑️ Clear All Data** - Start fresh (requires confirmation)
 
-Support
-If you encounter any issues:
+## 👥 Pre-loaded Participants
 
-Make sure all participants are registered
-Check the Admin Panel statistics
-Try clearing data and starting fresh if needed
+The app comes pre-configured with 18 participants:
+
+**👶 Kids (7):**
+- kid 1
+- kid 2
+- ...
+
+**👨 Adults (11):**
+- adult 1
+- adult 2
+- ...
+- 
+
+## 🎨 User Experience
+
+### Mobile Optimized
+- Touch-friendly buttons (44px minimum)
+- Responsive text sizing
+- Optimized padding and spacing
+- No zoom on input focus (iOS)
+- Sidebar collapses by default on mobile
+
+### Exciting Animations
+- **Spinning Gift** 🎁 - Rotating animation while matching
+- **Pulsing Text** - "Finding your Secret Santa match..."
+- **Blinking Sparkles** ✨ - Sequential sparkle animation
+- **Balloons** 🎈 - Celebration when match is revealed
+- **2-second buildup** - Perfect anticipation time
+
+### Intuitive Interface
+- **Tab Navigation** - Easy switching between features
+- **Dropdown Selectors** - No typing errors with names
+- **Status Indicators** - See who completed their wishlist
+- **Help Text** - Tooltips and instructions throughout
+- **Error Messages** - Clear feedback on what to do
+
+## 🛠️ Technical Details
+
+### Tech Stack
+- **Frontend**: Streamlit
+- **Backend**: Python 3.8+
+- **Data Storage**: JSON file (local)
+- **Styling**: Custom CSS with animations
+
+### Data Structure
+```json
+{
+  "participants": {
+    "Name": {
+      "is_kid": true/false,
+      "wishlist": [
+        {"name": "Gift idea", "url": "https://..."}
+      ],
+      "pin": "1234"
+    }
+  },
+  "assignments": {
+    "Giver": "Receiver"
+  }
+}
+```
+
+### Security Notes
+- `secret_santa_data.json` is excluded from Git (contains PINs and assignments)
+- Admin password should be changed in production
+- PINs are randomly generated (1000-9999)
+- Each PIN is unique
+
+## 🎯 Workflow
+
+1. **Admin**: Generate assignments
+2. **Admin**: Generate PINs
+3. **Admin**: Share PINs privately with each person
+4. **Everyone**: Add their wishlist
+5. **Everyone**: Use their PIN to find their match
+6. **Everyone**: Shop for their Secret Santa match!
+
+## 📝 Customization
+
+### Change Admin Password
+Edit line 190 in `secret_santa_streamlit.py`:
+```python
+if admin_password == "YOUR_NEW_PASSWORD":
+```
+
+### Modify Participants
+Edit the `load_data()` function to add/remove participants or change the kids/adults split.
+
+### Adjust Reveal Animation
+Modify the `time.sleep(2)` value in line 346 to change animation duration.
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest features
+- Submit pull requests
+
+## 📄 License
+
+This project is open source and available for personal and commercial use.
+
+## 🎁 Credits
+
+Built with ❤️ using Streamlit
+
+---
+
+**Enjoy your Secret Santa gift exchange! 🎄🎁**
