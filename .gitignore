@@ -29,6 +29,7 @@ wheels/
 
 # Secret Santa Data (contains sensitive PINs and assignments)
 secret_santa_data.json
+plan.md
 
 # IDE
 .vscode/
@@ -40,3 +41,6 @@ secret_santa_data.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Keys
+.env
