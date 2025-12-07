@@ -101,6 +101,9 @@ def render_admin_panel():
         st.subheader("Participant Statistics")
         participants = get_all_participants()
 
+        # Debug info
+        st.caption(f"Debug: Found {len(participants) if participants else 0} participants from database")
+
         if not participants:
             st.info("No participants yet.")
         else:
