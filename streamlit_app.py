@@ -13,6 +13,9 @@ from utils.matching import SecretSantaMatcher
 # Load environment variables
 load_dotenv()
 
+# Page configuration - must be first Streamlit command
+st.set_page_config(page_title="SEO Secret Santa", page_icon="🎅", layout="centered")
+
 # Helper to get config from secrets (Cloud) or env (Local)
 def get_config(key, default=None):
     # Try secrets if available
@@ -66,7 +69,7 @@ def send_magic_link(email):
     
     try:
         r = resend.Emails.send({
-            "from": "Santa <admin@seokringle.com>",
+            "from": "SEO Santa 2025 <onboarding@resend.dev",
             "to": email,
             "subject": "🎅 Login to SEO Secret Santa",
             "html": f"""
@@ -209,18 +212,20 @@ def render_admin_panel():
             st.button("Save Sponsor", disabled=True)
 
 def main():
-    st.set_page_config(page_title="SEO Secret Santa", page_icon="🎅", layout="centered")
-    
     # Check for token in URL
     if "token" in st.query_params and "user_email" not in st.session_state:
         token = st.query_params["token"]
         email = verify_token(token)
         if email:
             st.session_state.user_email = email
+            # Clear the token from URL to prevent reuse
+            st.query_params.clear()
             st.success("✅ Successfully logged in!")
+            st.rerun()
         else:
             st.error("❌ Invalid or expired login link.")
-    
+            st.query_params.clear()
+
     # Auth Flow
     if "user_email" not in st.session_state:
         st.title("🎅 SEO Secret Santa Login")
@@ -241,7 +246,14 @@ def main():
     # Logged In Flow
     email = st.session_state.user_email
     st.sidebar.write(f"Logged in as: **{email}**")
-    
+
+    # Logout button
+    if st.sidebar.button("🚪 Logout"):
+        # Clear all session state
+        for key in list(st.session_state.keys()):
+            del st.session_state[key]
+        st.rerun()
+
     # Admin Check
     is_admin = email in ADMIN_EMAILS
     if is_admin:
@@ -249,10 +261,6 @@ def main():
         mode = st.sidebar.radio("Mode", ["My Profile", "Admin Panel"])
     else:
         mode = "My Profile"
-
-    if st.sidebar.button("Logout"):
-        del st.session_state.user_email
-        st.rerun()
 
     if mode == "Admin Panel":
         render_admin_panel()
@@ -334,3 +342,6 @@ def main():
                         st.balloons()
                     else:
                         st.error("Failed to save profile.")
+
+if __name__ == "__main__":
+    main()
