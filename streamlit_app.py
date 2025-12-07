@@ -60,14 +60,19 @@ def send_magic_link(email):
     
     try:
         r = resend.Emails.send({
-            "from": "admin@seokringle.com",
+            "from": "Santa <admin@seokringle.com>",
             "to": email,
-            "subject": "🎅 Your Secret Santa Login Link",
+            "subject": "🎅 Login to SEO Secret Santa",
             "html": f"""
-            <h2>Welcome back to the SEO Community Secret Santa!</h2>
-            <p>Click the link below to access your profile:</p>
-            <p><a href="{link}">👉 Click here to login</a></p>
-            <p><i>This link expires in 24 hours.</i></p>
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                <h2>Welcome back!</h2>
+                <p>You requested a secure login link for the SEO Community Secret Santa.</p>
+                <div style="margin: 24px 0;">
+                    <a href="{link}" style="background-color: #d32f2f; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-weight: bold;">👉 Click here to Login</a>
+                </div>
+                <p style="color: #666; font-size: 14px;">If you didn't request this, you can safely ignore this email.</p>
+                <p style="color: #666; font-size: 14px;"><i>Link expires in 24 hours.</i></p>
+            </div>
             """
         })
         return True
