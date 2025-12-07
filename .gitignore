@@ -46,3 +46,5 @@ Thumbs.db
 
 # Keys
 .env
+.env.local
+.env.example
