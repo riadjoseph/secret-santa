@@ -60,7 +60,7 @@ def send_magic_link(email):
     
     try:
         r = resend.Emails.send({
-            "from": "Santa <admin@seokringle.com>",
+            "from": "onboarding@resend.dev",
             "to": email,
             "subject": "🎅 Login to SEO Secret Santa",
             "html": f"""
