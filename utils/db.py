@@ -81,7 +81,7 @@ def save_assignments(assignments):
     if not supabase: return False
     try:
         # We don't delete immediately to be safe, but typically we'd clear old ones for a new run
-        
+
         data = []
         for giver, receiver in assignments.items():
             data.append({
@@ -89,10 +89,32 @@ def save_assignments(assignments):
                 "receiver_email": receiver,
                 "status": "pending"
             })
-            
+
         if data:
             supabase.table("assignments").insert(data).execute()
         return True
     except Exception as e:
         print(f"Error saving assignments: {e}")
         return False
+
+def get_all_assignments():
+    """Fetch all assignments from DB."""
+    if not supabase: return []
+    try:
+        response = supabase.table("assignments").select("*").execute()
+        return response.data
+    except Exception as e:
+        print(f"Error fetching assignments: {e}")
+        return []
+
+def get_assignment_for_user(email):
+    """Get the assignment for a specific user (who they should give to)."""
+    if not supabase: return None
+    try:
+        response = supabase.table("assignments").select("*").eq("giver_email", email).execute()
+        if response.data:
+            return response.data[0]
+        return None
+    except Exception as e:
+        print(f"Error fetching assignment: {e}")
+        return None

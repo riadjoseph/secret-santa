@@ -7,7 +7,7 @@ import resend
 from dotenv import load_dotenv
 
 # Utilities
-from utils.db import save_profile, load_user_profile, get_all_participants, save_assignments
+from utils.db import save_profile, load_user_profile, get_all_participants, save_assignments, get_all_assignments, get_assignment_for_user
 from utils.matching import SecretSantaMatcher
 
 # Load environment variables
@@ -89,27 +89,124 @@ def send_magic_link(email):
 def render_admin_panel():
     st.header("🔒 Admin Panel")
     st.warning("You are in Admin Mode.")
-    
-    # Stats
-    participants = get_all_participants()
-    st.metric("Total Participants", len(participants))
-    
-    # Actions
-    st.subheader("⚙️ Actions")
-    if st.button("🎲 Generate Assignments (Run Matching Algorithm)"):
-        with st.spinner("Running sophisticated matching logic..."):
-            matcher = SecretSantaMatcher(participants)
-            assignments = matcher.run_match()
-            
-            if assignments:
-                # Save to DB
-                if save_assignments(assignments):
-                    st.success(f"✅ Created {len(assignments)} assignments successfully!")
-                    st.json(assignments) # Debug view
-                else:
-                    st.error("❌ Failed to save assignments to DB.")
+
+    # Tabs for different admin sections
+    tab1, tab2, tab3 = st.tabs(["📊 Statistics", "🎲 Matching", "💼 Sponsors"])
+
+    # Tab 1: Statistics
+    with tab1:
+        st.subheader("Participant Statistics")
+        participants = get_all_participants()
+
+        if not participants:
+            st.info("No participants yet.")
+        else:
+            # Overall metrics
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Total Participants", len(participants))
+            with col2:
+                expertise_counts = {}
+                for p in participants:
+                    level = p.get("expertise_level", "Unknown")
+                    expertise_counts[level] = expertise_counts.get(level, 0) + 1
+                st.metric("Seniors", expertise_counts.get("Senior", 0))
+            with col3:
+                st.metric("Juniors", expertise_counts.get("Junior", 0))
+
+            # Expertise breakdown
+            st.markdown("---")
+            st.write("**Expertise Breakdown:**")
+            for level, count in expertise_counts.items():
+                st.write(f"- {level}: {count}")
+
+            # Participant table
+            st.markdown("---")
+            st.subheader("Participant List")
+
+            import pandas as pd
+            df = pd.DataFrame(participants)
+
+            # Select relevant columns for display
+            display_columns = ["name", "email", "expertise_level", "pledge"]
+            if all(col in df.columns for col in display_columns):
+                display_df = df[display_columns].copy()
+                display_df.columns = ["Name", "Email", "Expertise", "Pledge"]
+                st.dataframe(display_df, use_container_width=True)
             else:
-                st.error("❌ Algorithm failed to find a valid matching.")
+                st.dataframe(df)
+
+            # Export option
+            if st.button("📥 Export Participant Data (CSV)"):
+                csv = df.to_csv(index=False)
+                st.download_button(
+                    label="Download CSV",
+                    data=csv,
+                    file_name="participants.csv",
+                    mime="text/csv"
+                )
+
+    # Tab 2: Matching
+    with tab2:
+        st.subheader("Assignment Management")
+        participants = get_all_participants()
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+            if st.button("🎲 Generate New Assignments", use_container_width=True):
+                if len(participants) < 2:
+                    st.error("❌ Need at least 2 participants to generate assignments.")
+                else:
+                    with st.spinner("Running sophisticated matching logic..."):
+                        matcher = SecretSantaMatcher(participants)
+                        assignments = matcher.run_match()
+
+                        if assignments:
+                            # Save to DB
+                            if save_assignments(assignments):
+                                st.success(f"✅ Created {len(assignments)} assignments successfully!")
+                                st.json(assignments)
+                            else:
+                                st.error("❌ Failed to save assignments to DB.")
+                        else:
+                            st.error("❌ Algorithm failed to find a valid matching.")
+
+        with col2:
+            if st.button("👁️ View Current Assignments", use_container_width=True):
+                assignments = get_all_assignments()
+
+                if assignments:
+                    st.success(f"Found {len(assignments)} assignments")
+                    import pandas as pd
+                    df_assignments = pd.DataFrame(assignments)
+                    st.dataframe(df_assignments, use_container_width=True)
+                else:
+                    st.info("No assignments found. Generate assignments first.")
+
+        st.markdown("---")
+        st.caption("⚠️ Generating new assignments will create new records. Make sure to clear old assignments if needed.")
+
+    # Tab 3: Sponsors
+    with tab3:
+        st.subheader("Sponsor Management")
+        st.info("Sponsor management feature coming soon. This will allow you to manage event sponsors and their details.")
+
+        st.markdown("**Planned Features:**")
+        st.markdown("""
+        - Add/Remove sponsors
+        - Upload sponsor logos
+        - Manage sponsor tiers (Gold, Silver, Bronze)
+        - Display sponsors on public pages
+        """)
+
+        # Placeholder for sponsor management
+        with st.expander("➕ Add Sponsor (Coming Soon)"):
+            st.text_input("Sponsor Name", disabled=True)
+            st.selectbox("Tier", ["Gold", "Silver", "Bronze"], disabled=True)
+            st.text_input("Website URL", disabled=True)
+            st.file_uploader("Logo", disabled=True)
+            st.button("Save Sponsor", disabled=True)
 
 def main():
     st.set_page_config(page_title="SEO Secret Santa", page_icon="🎅", layout="centered")
