@@ -14,7 +14,7 @@ from utils.matching import SecretSantaMatcher
 load_dotenv()
 
 # Page configuration - must be first Streamlit command
-st.set_page_config(page_title="SEO Secret Santa", page_icon="🎅", layout="centered")
+st.set_page_config(page_title="SEO Kringle - Secret Santa", page_icon="🎅", layout="centered")
 
 # Helper to get config from secrets (Cloud) or env (Local)
 def get_config(key, default=None):
@@ -66,12 +66,12 @@ def send_magic_link(email):
     """Send the magic link via Resend."""
     token = create_token(email)
     link = f"{APP_DOMAIN}?token={token}"
-    
+
     try:
         r = resend.Emails.send({
-            "from": "SEO Santa 2025 <onboarding@resend.dev>",
+            "from": "SEO Kringle <admin@seokringle.com>",
             "to": email,
-            "subject": "🎅 Login to SEO Secret Santa",
+            "subject": "🎅 Login to SEO Kringle Secret Santa",
             "html": f"""
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
                 <h2>Welcome back!</h2>
@@ -231,7 +231,7 @@ def main():
 
     # Auth Flow
     if "user_email" not in st.session_state:
-        st.title("🎅 SEO Secret Santa Login")
+        st.title("🎅 SEO Kringle - Secret Santa Login")
         st.markdown("Enter your email to receive a magic login link.")
         
         with st.form("login_form"):
