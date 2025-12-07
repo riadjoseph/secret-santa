@@ -68,8 +68,10 @@ def send_magic_link(email):
     link = f"{APP_DOMAIN}?token={token}"
 
     try:
+        # Use onboarding@resend.dev for testing until seokringle.com domain is verified
+        # After domain verification, change to: "SEO Kringle <admin@seokringle.com>"
         r = resend.Emails.send({
-            "from": "SEO Kringle <admin@seokringle.com>",
+            "from": "SEO Kringle <onboarding@resend.dev>",
             "to": email,
             "subject": "🎅 Login to SEO Kringle Secret Santa",
             "html": f"""
